@@ -63,6 +63,9 @@ def test_language_release_directories_and_guides_are_separate() -> None:
 
 def test_root_readme_is_ready_for_the_english_public_repository() -> None:
     root_readme = (PROJECT_ROOT / "README.md").read_text(encoding="utf-8")
+    screenshot = (
+        PROJECT_ROOT / "docs" / "images" / "batch-markdown-converter-english.png"
+    )
 
     assert root_readme.startswith("# Batch Markdown Converter for macOS")
     assert "An English macOS desktop app" in root_readme
@@ -71,6 +74,9 @@ def test_root_readme_is_ready_for_the_english_public_repository() -> None:
     assert "not an official Microsoft product" in root_readme
     assert "Python 3.12" in root_readme
     assert "PyInstaller 6.21.0" in root_readme
+    assert "docs/images/batch-markdown-converter-english.png" in root_readme
+    assert screenshot.read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
+    assert screenshot.stat().st_size > 10_000
     korean_readme = PROJECT_ROOT / "README.ko.md"
     assert korean_readme.is_file()
     assert "./scripts/run.command" in korean_readme.read_text(encoding="utf-8")

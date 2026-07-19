@@ -8,6 +8,8 @@ drop. It uses Microsoft's open-source
 
 > This is an independent open-source GUI project and is not an official Microsoft product.
 
+![Batch Markdown Converter English interface](docs/images/batch-markdown-converter-english.png)
+
 ## Features
 
 - Add multiple files and folders at once, including recursive folder scanning
