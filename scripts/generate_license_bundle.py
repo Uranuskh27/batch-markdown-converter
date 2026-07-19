@@ -2,8 +2,10 @@
 from __future__ import annotations
 
 import argparse
+import platform
 import re
 import shutil
+import sys
 from importlib import metadata
 from pathlib import Path
 
@@ -97,6 +99,16 @@ def metadata_value(dist: metadata.Distribution, key: str) -> str:
     return " ".join(value.split())
 
 
+def find_python_license() -> Path:
+    base_executable = Path(getattr(sys, "_base_executable", sys.executable)).resolve()
+    candidates = [parent / "LICENSE" for parent in base_executable.parents]
+    candidates.extend((Path(sys.base_prefix) / "LICENSE", Path(sys.prefix) / "LICENSE"))
+    for candidate in candidates:
+        if candidate.is_file():
+            return candidate
+    raise RuntimeError("Could not locate the bundled Python runtime license")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("output", type=Path)
@@ -132,6 +144,33 @@ def main() -> int:
             homepage = urls[0].split(",", 1)[-1].strip() if urls else ""
         rows.append((name, dist.version, license_name, homepage))
 
+    python_version = platform.python_version()
+    python_dir = output / f"python-{python_version}"
+    python_dir.mkdir()
+    shutil.copy2(find_python_license(), python_dir / "PYTHON-LICENSE.txt")
+    rows.append(
+        (
+            "Python",
+            python_version,
+            "Python Software Foundation License Version 2",
+            f"https://docs.python.org/{platform.python_version_tuple()[0]}.{platform.python_version_tuple()[1]}/license.html",
+        )
+    )
+
+    pyinstaller = metadata.distribution("pyinstaller")
+    pyinstaller_dir = output / f"pyinstaller-{pyinstaller.version}"
+    pyinstaller_dir.mkdir()
+    if copy_distribution_licenses(pyinstaller, pyinstaller_dir) == 0:
+        raise RuntimeError(f"No license material found for PyInstaller {pyinstaller.version}")
+    rows.append(
+        (
+            "PyInstaller bootloader",
+            pyinstaller.version,
+            "GPL-2.0-or-later WITH Bootloader-exception; runtime hooks Apache-2.0",
+            "https://github.com/pyinstaller/pyinstaller",
+        )
+    )
+
     shutil.copy2(PROJECT_ROOT / "licenses" / "Qt-PySide-NOTICE.txt", output / "Qt-PySide-NOTICE.txt")
     shutil.copy2(PROJECT_ROOT / "licenses" / "LGPL-3.0.txt", output / "LGPL-3.0.txt")
     shutil.copy2(PROJECT_ROOT / "licenses" / "GPL-3.0.txt", output / "GPL-3.0.txt")
@@ -141,9 +180,10 @@ def main() -> int:
     )
 
     lines = [
-        "# Runtime third-party components",
+        "# Distributed third-party components",
         "",
-        "Generated from the locked Python environment used to build this release.",
+        "Generated from the locked environment used to build this release. The inventory includes",
+        "the bundled Python runtime and PyInstaller bootloader in addition to Python packages.",
         "",
         "| Component | Version | Declared license | Project |",
         "| --- | --- | --- | --- |",
@@ -160,7 +200,7 @@ def main() -> int:
         ]
     )
     (output / "COMPONENTS.md").write_text("\n".join(lines), encoding="utf-8")
-    print(f"Collected licenses for {len(rows)} runtime components: {output}")
+    print(f"Collected licenses for {len(rows)} distributed components: {output}")
     return 0
 
 

@@ -82,6 +82,21 @@ Apple notarization instructions for public releases.
 Added documents are handled by local conversion processes. This GUI does not upload documents to an
 external server. Results are written only to the output location selected by the user.
 
+## Open-source foundations and attribution
+
+- [Microsoft MarkItDown 0.1.6](https://github.com/microsoft/markitdown) — unmodified conversion
+  engine, MIT License.
+- [Qt for Python / PySide6 and Shiboken6 6.11.1](https://doc.qt.io/qtforpython-6/) — unmodified GUI
+  runtime, LGPLv3.
+- [Python 3.12](https://docs.python.org/3.12/license.html) — bundled interpreter, PSF License
+  Version 2.
+- [PyInstaller 6.21.0](https://github.com/pyinstaller/pyinstaller) — packager and embedded
+  bootloader, GPL-2.0-or-later with Bootloader Exception; run-time hooks are Apache-2.0.
+
+The DMG includes a versioned inventory, upstream project links, and individual license files for
+every distributed component under `Third-Party-Licenses/`. The dog, bone, sun, and moon are original
+QPainter vectors and do not use third-party image or font assets.
+
 ## Contributing
 
 Bug reports and improvements are welcome. When filing an issue, include your macOS version, Mac model,

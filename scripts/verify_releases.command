@@ -57,6 +57,10 @@ verify_mounted_dmg() {
   [[ -s "$mount_point/Third-Party-Licenses/Microsoft-MarkItDown-MIT.txt" ]]
   grep -q 'PySide6' "$mount_point/Third-Party-Licenses/COMPONENTS.md"
   grep -q 'markitdown' "$mount_point/Third-Party-Licenses/COMPONENTS.md"
+  grep -q '| Python |' "$mount_point/Third-Party-Licenses/COMPONENTS.md"
+  grep -q '| PyInstaller bootloader |' "$mount_point/Third-Party-Licenses/COMPONENTS.md"
+  find "$mount_point/Third-Party-Licenses" -path '*/python-*/PYTHON-LICENSE.txt' -type f | grep -q .
+  find "$mount_point/Third-Party-Licenses" -path '*/pyinstaller-*/COPYING.txt' -type f | grep -q .
 
   local pyside_root="$mount_point/$app_name/Contents/Frameworks/PySide6"
   [[ -d "$pyside_root/Qt/lib/QtCore.framework" ]]
@@ -83,4 +87,4 @@ verify_mounted_dmg "$ENGLISH_DMG" "Batch Markdown Converter English.app" \
   "io.github.batchmarkdownconverter.english"
 
 echo "Release verification passed for Korean and English DMGs."
-echo "Runtime license bundle and LGPL corresponding source verification passed."
+echo "Runtime, bootloader, and build-tool license bundle plus LGPL corresponding source verification passed."

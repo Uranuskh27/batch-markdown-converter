@@ -79,6 +79,8 @@ def test_language_github_readmes_are_ready_for_separate_repositories() -> None:
     for readme in (korean_text, english_text):
         assert "Microsoft" in readme
         assert "MIT License" in readme
+        assert "Python 3.12" in readme
+        assert "PyInstaller 6.21.0" in readme
         assert "SHA256SUMS.txt" in readme
         assert "DISTRIBUTION.md" in readme
 
@@ -91,6 +93,8 @@ def test_root_readme_is_ready_for_the_english_public_repository() -> None:
     assert "Batch-Markdown-Converter-English-*-arm64.dmg" in root_readme
     assert "Batch Markdown Converter English.app" in root_readme
     assert "not an official Microsoft product" in root_readme
+    assert "Python 3.12" in root_readme
+    assert "PyInstaller 6.21.0" in root_readme
     assert (PROJECT_ROOT / "README.ko.md").is_file()
 
 
@@ -169,6 +173,13 @@ def test_open_source_compliance_material_is_complete() -> None:
     )
     assert "prepare_lgpl_sources.command" in package_script
     assert "generate_license_bundle.py" in package_script
+
+    license_generator = (PROJECT_ROOT / "scripts" / "generate_license_bundle.py").read_text(
+        encoding="utf-8"
+    )
+    assert "PYTHON-LICENSE.txt" in license_generator
+    assert "PyInstaller bootloader" in license_generator
+    assert "Bootloader-exception" in license_generator
 
     for build_script_name in ("build_app.command", "build_english_app.command"):
         build_script = (PROJECT_ROOT / "scripts" / build_script_name).read_text(encoding="utf-8")

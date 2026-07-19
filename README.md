@@ -86,6 +86,23 @@ and Apple notarization instructions.
 Added documents are handled by local conversion processes. This GUI does not upload documents to an
 external server. Results are written only to the output location selected by the user.
 
+## Open-source foundations and attribution
+
+- [Microsoft MarkItDown 0.1.6](https://github.com/microsoft/markitdown) — unmodified document
+  conversion engine, MIT License.
+- [Qt for Python / PySide6 and Shiboken6 6.11.1](https://doc.qt.io/qtforpython-6/) — GUI
+  runtime, used unmodified under LGPLv3.
+- [Python 3.12](https://docs.python.org/3.12/license.html) — bundled interpreter runtime,
+  Python Software Foundation License Version 2.
+- [PyInstaller 6.21.0](https://github.com/pyinstaller/pyinstaller) — application packager and
+  embedded bootloader, GPL-2.0-or-later with the PyInstaller Bootloader Exception; embedded
+  run-time hooks are Apache-2.0.
+
+The DMG's `Third-Party-Licenses/COMPONENTS.md` contains the version, declared license, project
+link, and supplied license files for every distributed component. The running dog, bone, sun,
+and moon are original QPainter vector drawings created for this project; no third-party image or
+font asset is bundled for them.
+
 ## Contributing
 
 Bug reports and improvements are welcome. When filing an issue, include your macOS version, Mac model,
@@ -101,6 +118,7 @@ Run the full test suite before submitting a code change:
 ## License
 
 This GUI project is released under the [MIT License](LICENSE). Microsoft MarkItDown is also provided
-under the MIT License. Notices for bundled libraries are available in `THIRD_PARTY_NOTICES.md`.
+under the MIT License. Complete notices for bundled libraries and build components are available in
+[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
 Qt/PySide is used under LGPLv3; corresponding source and replacement instructions are documented in
 `COMPLIANCE.md` and `BUILD_AND_RELINK.md`. This project is not an official Microsoft product.

@@ -38,6 +38,18 @@ Exact PySide6, Qt Base, and Qt SVG source archives are generated under
 `release/Source-Code/` and must be attached to the same GitHub Release as the
 DMGs. See `BUILD_AND_RELINK.md` and `licenses/SOURCE_OFFER.md`.
 
+## Python and PyInstaller
+
+The app bundle contains the unmodified Python 3.12 interpreter. Its exact
+version, Python Software Foundation License Version 2 text, and upstream
+license URL are included in each DMG's generated component inventory.
+
+PyInstaller 6.21.0 is the packaging tool. The final executable contains its
+bootloader and run-time hooks. Each DMG includes PyInstaller's complete
+`COPYING.txt`, identifies the GPL-2.0-or-later Bootloader Exception, and notes
+the Apache-2.0 license for embedded run-time hooks. No PyInstaller source is
+modified by this project.
+
 ## Release rule
 
 Do not publish a DMG unless `scripts/verify_releases.command` passes. Run the

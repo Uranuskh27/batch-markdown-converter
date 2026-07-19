@@ -148,7 +148,7 @@ DMG, 체크섬, 설치 안내와 GitHub README의 이름 일관성을 자동 검
 체크섬 및 배포 안내 연결이 해당 언어판과 일치하는지 자동화 테스트로 검증했다.
 
 무료 오픈소스 포트폴리오 배포를 위해 Microsoft MarkItDown MIT 전문, Qt/PySide LGPLv3와
-GPLv3 전문, 42개 런타임 구성요소의 버전별 라이선스 묶음, LGPL 대응 소스 및 재링크 안내를
+GPLv3 전문, 44개 배포 구성요소의 버전별 라이선스 묶음, LGPL 대응 소스 및 재링크 안내를
 추가했다. 사용하지 않는 GPL 전용 Qt Virtual Keyboard와 연결 모듈을 두 앱에서 제거하고
 끊어진 심볼릭 링크가 없는지 확인했다. 새 한국어·영문 DMG의 체크섬, 마운트, 라이선스 파일,
 대응 소스 3개, 코드서명과 앱 실행을 모두 검증했다.
@@ -158,3 +158,7 @@ Microsoft 상표 지침에 맞춰 앱 브랜드를 `Batch Markdown Converter`로
 DMG, 번들 ID, 설정 저장소, 언어 환경변수, 문서와 배포 명령을 함께 갱신했다. 시스템 이모지로
 표시하던 뼈다귀도 자체 `QPainter` 벡터로 교체했다. 변경 후 의존성 무결성 검사와 전체 80개
 테스트를 다시 실행해 모두 통과했다.
+
+최종 출처 감사에서 Python 3.12 런타임과 PyInstaller bootloader를 42개 Python 의존성 목록과
+별도로 식별하도록 보강했다. 각 DMG에 정확한 Python PSF 라이선스와 PyInstaller `COPYING.txt`,
+버전, 원본 프로젝트 링크, Bootloader Exception 및 run-time hook의 Apache-2.0 고지를 포함한다.
