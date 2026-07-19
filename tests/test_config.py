@@ -27,3 +27,10 @@ def test_open_output_directory_defaults_off_and_persists(monkeypatch) -> None:
 
     settings.open_output_directory = False
     assert settings.open_output_directory is False
+
+
+def test_output_mode_defaults_to_chosen_directory(monkeypatch) -> None:
+    monkeypatch.setattr(config_module, "QSettings", MemorySettings)
+    settings = AppSettings()
+
+    assert settings.output_mode == "directory"

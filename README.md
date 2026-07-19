@@ -14,7 +14,7 @@ drop. It uses Microsoft's open-source
 - Run each conversion in an isolated process so one file cannot freeze the app
 - See queued, converting, completed, failed, skipped, and cancelled states per file
 - Retry only failed files or cancel queued and running work
-- Save Markdown next to each source file or in a chosen output folder
+- Choose one output folder and always show exactly where Markdown will be saved
 - Rename, skip, or overwrite when an output filename already exists
 - Switch between light and dark themes with an animated sun-and-moon control
 - Follow conversion progress with an animated running dog
@@ -47,7 +47,7 @@ the first launch, Control-click the app in Finder and choose **Open**.
 ## Usage
 
 1. Select files with **Add Files**, or drag files and folders into the drop area.
-2. Choose whether to save results next to the source files or in a selected folder.
+2. Select **Choose Folder…** and confirm the displayed output location.
 3. If needed, open Settings to change concurrency, per-file timeout, filename collision behavior,
    and whether Finder opens after conversion.
 4. Select **Convert All**.

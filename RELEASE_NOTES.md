@@ -6,7 +6,7 @@ Initial public release of the English macOS app.
 
 - Batch-convert files and folders to Markdown by drag and drop.
 - Keep each conversion isolated so one problematic file does not stop the queue.
-- Choose an output folder or save results beside the source files.
+- Choose one output folder and see the exact save location in the main window.
 - Handle filename collisions by renaming, skipping, or overwriting.
 - Switch between light and dark themes.
 - Optionally open completed output folders in Finder.

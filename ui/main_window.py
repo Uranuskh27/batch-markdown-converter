@@ -26,7 +26,6 @@ from .drop_zone import DropZone
 from .dog_progress_bar import BoneGoalIcon, DogProgressBar
 from .file_table import FileTableModel
 from .settings_dialog import SettingsDialog
-from .segmented_control import SegmentedControl
 from .theme_switch import ThemeSwitch
 from .theme import apply_theme
 
@@ -63,26 +62,19 @@ class MainWindow(QMainWindow):
         self.table.setColumnWidth(2, 100)
         self.table.doubleClicked.connect(self._reveal_result)
 
-        self.output_mode = SegmentedControl(
-            [
-                (tr("원본 옆", "Next to Source"), "source"),
-                (tr("폴더 지정", "Choose Folder"), "directory"),
-            ]
-        )
-        self.output_mode.button_for_data("source").setToolTip(
-            tr("각 변환 파일을 원본 파일 옆에 저장", "Save each converted file beside its source")
-        )
-        self.output_mode.button_for_data("directory").setToolTip(
-            tr("모든 결과를 선택한 폴더에 저장", "Save all results in a chosen folder")
-        )
-        self.output_mode.set_current_data(self.settings.output_mode)
-        self.output_mode.selection_changed.connect(self._output_mode_changed)
+        # The app has one predictable output policy: every converted file is
+        # written below the folder chosen by the user. Migrate settings saved by
+        # older releases that still offered a "next to source" mode.
+        self.settings.output_mode = "directory"
 
         self.output_label = QLabel()
         self.output_label.setObjectName("outputPath")
         self.output_label.setAccessibleName(tr("결과 저장 위치", "Output location"))
         self.output_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
-        self.choose_output_button = QPushButton()
+        self.choose_output_button = QPushButton(tr("폴더 선택…", "Choose Folder…"))
+        self.choose_output_button.setAccessibleName(
+            tr("결과 저장 폴더 선택", "Choose output folder")
+        )
         self.choose_output_button.clicked.connect(self._choose_output_directory)
 
         self.add_button = QPushButton(tr("파일 추가", "Add Files"))
@@ -130,9 +122,8 @@ class MainWindow(QMainWindow):
 
         output_row = QHBoxLayout()
         output_row.addWidget(QLabel(tr("결과 저장:", "Save results:")))
-        output_row.addWidget(self.output_mode)
-        output_row.addWidget(self.output_label, 1)
         output_row.addWidget(self.choose_output_button)
+        output_row.addWidget(self.output_label, 1)
 
         progress_row = QHBoxLayout()
         progress_row.setSpacing(8)
@@ -161,6 +152,7 @@ class MainWindow(QMainWindow):
 
         self.status_message_label = QLabel()
         self.status_message_label.setObjectName("statusMessage")
+        self.status_message_label.setMinimumHeight(30)
         self.statusBar().addWidget(self.status_message_label, 1)
         self._status_clear_timer = QTimer(self)
         self._status_clear_timer.setSingleShot(True)
@@ -225,11 +217,6 @@ class MainWindow(QMainWindow):
         if dialog.exec():
             self.add_paths([Path(path) for path in dialog.selectedFiles()])
 
-    @Slot(str)
-    def _output_mode_changed(self, mode: str) -> None:
-        self.settings.output_mode = mode
-        self._update_output_controls()
-
     def _choose_output_directory(self) -> None:
         selected = QFileDialog.getExistingDirectory(
             self,
@@ -239,26 +226,20 @@ class MainWindow(QMainWindow):
         if selected:
             self.settings.output_directory = Path(selected)
             self.settings.output_mode = "directory"
-            self.output_mode.set_current_data("directory")
             self._update_output_controls()
 
     def _update_output_controls(self) -> None:
-        is_directory = self.settings.output_mode == "directory"
         directory = self.settings.output_directory
-        self.choose_output_button.setVisible(is_directory)
-        self.output_label.setProperty("needsSelection", bool(is_directory and not directory))
-        if not is_directory:
-            self.output_label.setText(
-                tr("각 원본 파일 옆에 .md로 저장", "Save .md beside each source file")
-            )
-        elif directory:
+        self.settings.output_mode = "directory"
+        self.output_label.setProperty("needsSelection", not bool(directory))
+        if directory:
             self.output_label.setText(str(directory))
-            self.choose_output_button.setText(tr("변경…", "Change…"))
+            self.output_label.setToolTip(str(directory))
         else:
             self.output_label.setText(
                 tr("저장할 폴더를 선택하세요", "Choose where converted files will be saved")
             )
-            self.choose_output_button.setText(tr("폴더 선택…", "Choose Folder…"))
+            self.output_label.setToolTip("")
         self.output_label.style().unpolish(self.output_label)
         self.output_label.style().polish(self.output_label)
 
@@ -338,7 +319,9 @@ class MainWindow(QMainWindow):
     def _align_status_message(self) -> None:
         summary_x = self.summary_label.mapTo(self, QPoint(0, 0)).x()
         label_x = self.status_message_label.mapTo(self, QPoint(0, 0)).x()
-        self.status_message_label.setContentsMargins(max(0, summary_x - label_x), 0, 0, 0)
+        self.status_message_label.setContentsMargins(
+            max(0, summary_x - label_x), 4, 0, 4
+        )
 
     def showEvent(self, event) -> None:
         super().showEvent(event)

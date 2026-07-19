@@ -14,7 +14,7 @@ class AppSettings:
 
     @property
     def output_mode(self) -> str:
-        return str(self._settings.value("output/mode", "source"))
+        return str(self._settings.value("output/mode", "directory"))
 
     @output_mode.setter
     def output_mode(self, value: str) -> None:

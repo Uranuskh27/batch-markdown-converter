@@ -61,30 +61,6 @@ def test_language_release_directories_and_guides_are_separate() -> None:
     assert (PROJECT_ROOT / "LICENSE").read_text(encoding="utf-8").startswith("MIT License")
 
 
-def test_language_github_readmes_are_ready_for_separate_repositories() -> None:
-    korean = PROJECT_ROOT / "github" / "Korean" / "README.md"
-    english = PROJECT_ROOT / "github" / "English" / "README.md"
-
-    assert korean.is_file()
-    assert english.is_file()
-
-    korean_text = korean.read_text(encoding="utf-8")
-    english_text = english.read_text(encoding="utf-8")
-
-    assert "Batch-Markdown-Converter-Korean-*-arm64.dmg" in korean_text
-    assert "./scripts/run.command" in korean_text
-    assert "Batch-Markdown-Converter-English-*-arm64.dmg" in english_text
-    assert "./scripts/run_english.command" in english_text
-
-    for readme in (korean_text, english_text):
-        assert "Microsoft" in readme
-        assert "MIT License" in readme
-        assert "Python 3.12" in readme
-        assert "PyInstaller 6.21.0" in readme
-        assert "SHA256SUMS.txt" in readme
-        assert "DISTRIBUTION.md" in readme
-
-
 def test_root_readme_is_ready_for_the_english_public_repository() -> None:
     root_readme = (PROJECT_ROOT / "README.md").read_text(encoding="utf-8")
 
@@ -95,7 +71,10 @@ def test_root_readme_is_ready_for_the_english_public_repository() -> None:
     assert "not an official Microsoft product" in root_readme
     assert "Python 3.12" in root_readme
     assert "PyInstaller 6.21.0" in root_readme
-    assert (PROJECT_ROOT / "README.ko.md").is_file()
+    korean_readme = PROJECT_ROOT / "README.ko.md"
+    assert korean_readme.is_file()
+    assert "./scripts/run.command" in korean_readme.read_text(encoding="utf-8")
+    assert not (PROJECT_ROOT / "github").exists()
 
 
 def test_public_source_has_no_local_user_identifier_or_home_path() -> None:

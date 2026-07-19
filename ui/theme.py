@@ -216,42 +216,6 @@ def theme_stylesheet(theme: str) -> str:
             background-color: {c.disabled_background};
             border-color: {c.border};
         }}
-        QWidget#segmentedControl {{
-            background-color: transparent;
-        }}
-        QPushButton[segmented="true"] {{
-            min-height: 26px;
-            padding: 4px 12px;
-            color: {c.text};
-            background-color: {c.surface_alt};
-            border: 1px solid {c.border};
-            border-radius: 0;
-        }}
-        QPushButton[segmented="true"][segmentPosition="left"] {{
-            border-top-left-radius: 7px;
-            border-bottom-left-radius: 7px;
-        }}
-        QPushButton[segmented="true"][segmentPosition="right"] {{
-            border-left: none;
-            border-top-right-radius: 7px;
-            border-bottom-right-radius: 7px;
-        }}
-        QPushButton[segmented="true"]:hover:!checked {{
-            color: {c.accent};
-            background-color: {c.hover};
-        }}
-        QPushButton[segmented="true"]:checked {{
-            color: #FFFFFF;
-            background-color: {c.accent};
-            border-color: {c.accent};
-            font-weight: 600;
-        }}
-        QPushButton[segmented="true"][segmentPosition="right"]:checked {{
-            border-left: 1px solid {c.accent};
-        }}
-        QPushButton[segmented="true"]:focus {{
-            border: 2px solid {c.accent_pressed};
-        }}
         QComboBox, QSpinBox, QLineEdit {{
             min-height: 24px;
             padding: 3px 8px;

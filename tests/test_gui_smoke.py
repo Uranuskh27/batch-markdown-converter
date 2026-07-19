@@ -13,7 +13,6 @@ import ui.main_window as main_window_module
 from ui.main_window import MainWindow
 from ui.dog_progress_bar import BoneGoalIcon, DogProgressBar
 from ui.settings_dialog import SettingsDialog
-from ui.segmented_control import SegmentedControl
 from ui.theme_switch import ThemeSwitch
 
 
@@ -44,6 +43,8 @@ def test_main_window_can_be_created() -> None:
         + window.status_message_label.contentsMargins().left()
     )
     assert status_text_x == window.summary_label.mapTo(window, QPoint(0, 0)).x()
+    assert window.status_message_label.contentsMargins().top() == 4
+    assert window.status_message_label.contentsMargins().bottom() == 4
     assert isinstance(window.progress, DogProgressBar)
     assert window.progress.DOG_STYLE == "animated-cute-shiba-vector"
     assert isinstance(window.progress_goal_icon, BoneGoalIcon)
@@ -53,17 +54,11 @@ def test_main_window_can_be_created() -> None:
     assert window.progress.mapTo(window, QPoint(0, 0)).y() < window.summary_label.mapTo(
         window, QPoint(0, 0)
     ).y()
-    assert isinstance(window.output_mode, SegmentedControl)
-    assert window.output_mode.current_data() == "source"
-    assert window.output_mode.button_for_data("source").text() == "원본 옆"
-    assert ".md로 저장" in window.output_label.text()
-    assert not window.choose_output_button.isVisible()
-    window.output_mode.button_for_data("directory").click()
     assert settings.output_mode == "directory"
     assert "선택하세요" in window.output_label.text()
     assert window.choose_output_button.isVisible()
     assert window.choose_output_button.text() == "폴더 선택…"
-    window.output_mode.button_for_data("source").click()
+    assert not hasattr(window, "output_mode")
     assert isinstance(window.theme_toggle_button, ThemeSwitch)
     assert window.theme_toggle_button.text() == ""
     assert not window.theme_toggle_button.isChecked()
@@ -81,6 +76,31 @@ def test_main_window_can_be_created() -> None:
     assert window.theme_toggle_button.text() == ""
     assert not window.theme_toggle_button.isChecked()
     assert application.palette().color(QPalette.ColorRole.Window).name() == "#f5f7fa"
+    window.close()
+    assert application is not None
+
+
+def test_chosen_output_folder_is_shown_and_used(
+    tmp_path: Path, monkeypatch
+) -> None:
+    application = QApplication.instance() or QApplication([])
+    settings = TestSettings()
+    manager = JobManager(settings, Path(__file__).parents[1] / "app.py")
+    window = MainWindow(manager, settings)
+    output_directory = tmp_path / "markdown output"
+    monkeypatch.setattr(
+        main_window_module.QFileDialog,
+        "getExistingDirectory",
+        lambda *_args, **_kwargs: str(output_directory),
+    )
+
+    window.choose_output_button.click()
+
+    assert settings.output_mode == "directory"
+    assert settings.output_directory == output_directory
+    assert window.output_label.text() == str(output_directory)
+    assert window.output_label.toolTip() == str(output_directory)
+    assert window.choose_output_button.text() == "폴더 선택…"
     window.close()
     assert application is not None
 

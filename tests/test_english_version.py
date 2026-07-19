@@ -19,7 +19,6 @@ from tests.test_process_edge_cases import wait_for
 from ui.main_window import MainWindow
 from ui.dog_progress_bar import BoneGoalIcon, DogProgressBar
 from ui.settings_dialog import SettingsDialog
-from ui.segmented_control import SegmentedControl
 from ui.theme_switch import ThemeSwitch
 
 
@@ -59,6 +58,8 @@ def test_english_main_window_and_settings_have_no_korean_ui_text(monkeypatch) ->
         + window.status_message_label.contentsMargins().left()
     )
     assert status_text_x == window.summary_label.mapTo(window, QPoint(0, 0)).x()
+    assert window.status_message_label.contentsMargins().top() == 4
+    assert window.status_message_label.contentsMargins().bottom() == 4
     assert window.add_button.text() == "Add Files"
     assert not hasattr(window, "add_folder_button")
     assert isinstance(window.progress, DogProgressBar)
@@ -70,14 +71,10 @@ def test_english_main_window_and_settings_have_no_korean_ui_text(monkeypatch) ->
     assert window.progress.mapTo(window, QPoint(0, 0)).y() < window.summary_label.mapTo(
         window, QPoint(0, 0)
     ).y()
-    assert isinstance(window.output_mode, SegmentedControl)
-    assert window.output_mode.button_for_data("source").text() == "Next to Source"
-    assert window.output_mode.button_for_data("directory").text() == "Choose Folder"
-    assert window.output_label.text() == "Save .md beside each source file"
-    window.output_mode.button_for_data("directory").click()
     assert settings.output_mode == "directory"
+    assert not hasattr(window, "output_mode")
+    assert window.output_label.text() == "Choose where converted files will be saved"
     assert window.choose_output_button.text() == "Choose Folder…"
-    window.output_mode.button_for_data("source").click()
     assert isinstance(window.theme_toggle_button, ThemeSwitch)
     assert window.theme_toggle_button.text() == ""
     assert not window.theme_toggle_button.isChecked()
