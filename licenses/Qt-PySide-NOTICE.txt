@@ -1,0 +1,17 @@
+Qt for Python / PySide6 / Shiboken6 notice
+
+This application uses Qt for Python 6.11.1, including PySide6 and Shiboken6,
+under the GNU Lesser General Public License version 3 (LGPL-3.0-only).
+
+Qt and the Qt logo are trademarks of The Qt Company Ltd. This application is
+not endorsed by or affiliated with The Qt Company Ltd.
+
+The complete LGPL version 3 and GPL version 3 texts are distributed alongside
+this notice. Corresponding source archives and instructions for replacing the
+Qt/PySide libraries are described in SOURCE_OFFER.md and BUILD_AND_RELINK.md.
+
+The Batch Markdown Converter project does not modify Qt, PySide6, or Shiboken6.
+
+Project information:
+- https://doc.qt.io/qtforpython-6/
+- https://www.qt.io/licensing/open-source-lgpl-obligations

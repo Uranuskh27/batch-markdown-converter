@@ -1,0 +1,6 @@
+* text=auto eol=lf
+*.command text eol=lf
+*.dmg binary
+*.tar.xz binary
+licenses/*.txt -whitespace
+licenses/*.md -whitespace

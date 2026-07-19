@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "batch-markdown-converter"
+version = "0.1.0"
+description = "Local batch document converter for macOS powered by MarkItDown"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "PySide6>=6.8,<7",
+    "markitdown[pdf,docx,pptx,xlsx,xls,outlook]>=0.1.6,<0.2",
+]
+
+[project.optional-dependencies]
+build = ["pyinstaller>=6.11,<7"]
+test = ["pytest>=9.0.3,<10", "xlwt>=1.3,<2"]
+
+[project.scripts]
+batch-markdown-converter = "app:main"
+
+[tool.setuptools]
+py-modules = ["app"]
+packages = ["core", "ui"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
